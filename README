@@ -1,0 +1,4 @@
+This is the first step to add github admin features through the github REST API v3.
+
+Currently it has a working script to add webhooks to projects for bamboo.  More webhooks will be available for PivotalTracker and Hipchat soon.
+
