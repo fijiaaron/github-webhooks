@@ -7,7 +7,7 @@ require 'rubygems'
 require 'json'
 require 'HTTParty'
 
-puts 'adding pivotal hooks to repos'
+puts 'adding hipchat hooks to repos'
 
 # load webhooks.yml
 
@@ -16,11 +16,14 @@ file = File.open(config)
 yaml = YAML::load(file)
 tab = "\t"
 
-# get pivotal info from webhooks.yml
+# get hipchat info from webhooks.yml
 
-pivotal = yaml['pivotal']
-pivotal_api_token = pivotal['api_token']
-puts 'pivotal api token: ' + pivotal_api_token
+hipchat = yaml['hipchat']
+hipchat_auth_token = hipchat['auth_token']
+hipchat_room = hipchat['room']
+puts 'hipchat auth token: ' + hipchat_auth_token
+puts 'hipchat room: ' + hipchat_room
+
 
 
 # get github info from webhooks.yml
@@ -67,20 +70,21 @@ updates.each do |update|
   headers.each_pair do |key, value|
     puts key + ": " + value
   end
+
   
-  pivotal_config = {
-    :token => pivotal_api_token,
-    :branch => nil,
-    :endpoint => nil,
+  hipchat_config = {
+    :auth_token => hipchat_auth_token,
+    :room => hipchat_room,
+    :notify => nil
   }
   
-  pivotal_hook = {
-      :name => "pivotaltracker",
+  hipchat_hook = {
+      :name => "hipchat",
       :active => true,
-      :config => pivotal_config
+      :config => hipchat_config
     }
   
-  puts pivotal_hook.to_json
+  puts hipchat_hook.to_json
 
   puts "going to send"
   response = HTTParty.post(url, :headers => headers, :body => pivotal_hook.to_json)
