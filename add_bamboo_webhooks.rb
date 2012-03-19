@@ -78,15 +78,16 @@ tasks.each do |task|
     :password => bamboo.password 
   }
   
-  bamboo_hook = {
+  webhook = {
     :name => Bamboo.Hook,
     :active => true,
     :config => bamboo_config
   }
+  
   puts bamboo_hook.to_json
 
   puts "going to send"
-  response = HTTParty.post(url, :headers => headers, :body => bamboo_hook.to_json)
+  response = HTTParty.post(url, :headers => headers, :body => webhook.to_json)
     
   puts response
 end

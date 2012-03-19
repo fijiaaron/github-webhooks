@@ -78,7 +78,7 @@ updates.each do |update|
     :notify => nil
   }
   
-  hipchat_hook = {
+  webhook = {
       :name => "hipchat",
       :active => true,
       :config => hipchat_config
@@ -87,7 +87,7 @@ updates.each do |update|
   puts hipchat_hook.to_json
 
   puts "going to send"
-  response = HTTParty.post(url, :headers => headers, :body => pivotal_hook.to_json)
+  response = HTTParty.post(url, :headers => headers, :body => webhook.to_json)
   puts response
       
 end

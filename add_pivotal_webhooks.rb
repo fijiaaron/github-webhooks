@@ -74,7 +74,7 @@ updates.each do |update|
     :endpoint => nil,
   }
   
-  pivotal_hook = {
+  webhook = {
       :name => "pivotaltracker",
       :active => true,
       :config => pivotal_config
@@ -83,7 +83,7 @@ updates.each do |update|
   puts pivotal_hook.to_json
 
   puts "going to send"
-  response = HTTParty.post(url, :headers => headers, :body => pivotal_hook.to_json)
+  response = HTTParty.post(url, :headers => headers, :body => webhook.to_json)
   puts response
       
 end
