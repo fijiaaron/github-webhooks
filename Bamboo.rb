@@ -34,7 +34,6 @@ class Bamboo
   
   
   def payload(config, base_url=nil, username=nil, password=nil, build_key=nil, branch=nil)
-    pp config
     if config.has_key?(:repo)
       repo = config[:repo]
       plan = plans[repo]
