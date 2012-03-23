@@ -43,10 +43,12 @@ class Github
       puts key + ": " + value
     end
     
+    config = { :account => account, :repo => repo }
+      
     payload = {
       :name => webhook.Name,
       :active => true,
-      :config => webhook.payload()
+      :config => webhook.payload(config)
     }
   
     puts

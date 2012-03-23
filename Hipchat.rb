@@ -29,7 +29,7 @@ class Hipchat
       @notify = notify
     end
     
-    {:auth_token => auth_token, :room => room, :notify =>notify}
+    {:auth_token => @auth_token, :room => @room, :notify => @notify}
   end
   
 end

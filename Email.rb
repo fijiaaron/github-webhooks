@@ -29,7 +29,7 @@ class Email
       @send_from_author = send_from_author
     end
       
-    {:address=>@address, :secret=>@secret, :send_from_author=>@send_from_author}
+    {:address => @address, :secret => @secret, :send_from_author => @send_from_author}
   end
   
 end
