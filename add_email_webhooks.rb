@@ -1,18 +1,22 @@
-#!/usr/bin/env ruby
+#!ruby
 
 require 'yaml'
-
-require 'Email'
 require 'Github'
+require 'Email'
 
 config = 'webhooks.yml'
 file = File.open(config)
 yaml = YAML::load(file)
 
-email = Email.new(yaml['email'])
 github = Github.new(yaml['github'])
+
+email = Email.new(yaml['email'])
+#email.dont_send = true
 
 puts 'updating email webhooks'
 github.update_accounts(email)
+
+puts "\n================\n"
+puts 'done'
 
   

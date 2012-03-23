@@ -53,7 +53,13 @@ class Github
     puts payload.to_json
 
     puts "\n----------------\n"
-    response = HTTParty.post(url, :headers => headers, :body => payload.to_json)
+          
+    if webhook.dont_send
+      puts "request not sent"
+      return 
+    end
+
+    response = HTTParty.post(url, :headers => headers, :body => payload.to_json)    
     puts response
   end
   
