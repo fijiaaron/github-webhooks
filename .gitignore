@@ -2,3 +2,4 @@
 .project
 *~
 *.secret
+webhooks.yml*
