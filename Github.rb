@@ -1,72 +1,85 @@
-#!/usr/bin/env ruby
+require 'yaml'
+require 'base64'
+require 'pp'
 
-class Github 
-  include HTTParty
+require 'rubygems'
+require 'HTTParty'
+require 'json'
+
+class Github
+  attr_accessor :api_url, :username, :password, :auth_credentials
   
-  attr_accessor :api_url, :auth_credentials, :user
-  attr_accessor :base_uri, :basic_auth
-  attr_accessor :repos
   
-  def initialize(config = {})
+  def initialize(config={})
     @api_url = config['api_url']
-  @base_uri = @api_url
-
-    @auth_credentials = config['auth_credentials']
-  @basic_auth = @auth_credentials 
-
-    @user = config['user']
-    @repos = Array.new
-    config['repos'].each do |repo|
-  puts repo
-      @repos << repo
-    end
-  end
-
-  def get_hooks(repo, user=nil)
-    if (user == nil)
-      user = @user 
-    end
-       
-    request = get_hooks_url(repo, user)
-    #puts "in get_hooks(): request: " + request
-    
-    headers = {}
-    headers["Authorization"] = "Basic " + auth_credentials;
-        
-    response = HTTParty.get(request, :headers => headers) 
-    #response = HTTParty.get(request, :headers => headers);
-    
-    return response
+    @username = config['username']
+    @password = config['password']
+    @auth_credentials = config['auth_credentials'] 
+    @accounts = config['accounts']
+      
+    get_auth_credentials(@username, @password)        
   end
   
-  def get_hooks_url(repo, user=nil)
-    if (user == nil)
-      user = @user
+  
+  def get_auth_credentials(username, password)
+    if @auth_credentials.nil?
+      if not (@username.nil?)
+        @auth_credentials = Base64.encode64(username + ":" + password)  
+      end
     end
     
-    request = "/repos/" + @user + "/" + repo + "/hooks"
-    return base_uri + request
+    return @auth_credentials
   end
+  
+  
+  def set_webhook(webhook, account, repo)
+    puts "\n================\n"
+    
+    url = @api_url + "/repos/" + account + "/" + repo + "/hooks"
+    puts url
+    
+    headers = get_headers()
+    headers.each_pair do |key, value|
+      puts key + ": " + value
+    end
+    
+    payload = {
+      :name => webhook.Name,
+      :active => true,
+      :config => webhook.payload()
+    }
+  
+    puts
+    puts payload.to_json
 
-
-  def set_bamboo_hook(repo, user, build_key, branch, base_url)
-    request = "/repos" + user + "/" + repo + "/hooks"
-    
-    headers = {}
-    headers["Authorization"] = "Basic " + auth_credentials
-    
-    bamboo = Bamboo.new
-    
-    config = { 'base_url' => base_url, 'build_key' => build_key, 'branch' => branch }
-    
-    payload = { name => "bamboo", active => true, config => config  }
+    puts "\n----------------\n"
+    response = HTTParty.post(url, :headers => headers, :body => payload.to_json)
+    puts response
+  end
+  
+  
+  def update_accounts(webhook)
+    @accounts.each do |account|
+      account.each_pair do |account_name, repos|
+        #puts "github account name: " + account_name
        
-    response = HTTParty.post(request, :headers => headers)
+        repos.each do |repo|
+          #puts "github repo: " + repo
+            set_webhook(webhook, account_name, repo)
+        end
+      end
+    end
   end
+  
+  
+  def get_headers()
+    headers = {}
+    if not @auth_credentials.nil?
+      headers["Authorization"] = "Basic " +  @auth_credentials
+    end
     
-  def get_hook_url(repo, hook_id)
-  request = "/repos" + @user + "/" + repo + "/hooks" + "/" + hook_id
-  return base_uri + request
+    return headers
   end
+  
 end
 
