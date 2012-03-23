@@ -1,0 +1,42 @@
+email:
+ address: ========@========.===
+
+pivotal:
+ api_token: ================================
+
+hipchat:
+ auth_token: ==============================
+ room: ========
+ 
+bamboo:
+ base_url: http:/=============:8085/
+ username: ========
+ password: ========
+ plans:
+  my-first-repo
+   build_key: PROJECT-MYFIRSTPLAN
+  my-second-repo
+   build_key: PROJECT-MYSECONDPLAN
+  my-third-repo
+   build_key: PROJECT-MYTHIRDPLAN
+  my-fourth-repo
+   build_key: PROJECT-MYFOURTHPLAN
+  
+
+github:
+ api_url: https://api.github.com
+ username: ========
+ password: ========
+ accounts:
+  - account1
+     - my-first-repo
+     - my-second-repo
+     - deploy-server
+     - login-server
+     - messaging-server
+     - server-framework 
+     - sync-server
+     - task-server
+  - account2
+     - my-third-repo
+     - my-fourth-repo
